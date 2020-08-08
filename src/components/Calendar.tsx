@@ -21,11 +21,12 @@ export const Calendar = () => {
     const currentMonthDays = getCurrentMonthDays();
 
     const days = [...lastMonthDays, ...currentMonthDays, ...nextMonthDays];
+    console.log(days);
     const weeks = divisionWeek(days);
     return weeks;
   };
 
-  const divisionWeek = (items: number[]) => {
+  const divisionWeek = (items: dayjs.Dayjs[]) => {
     const weekLength = 7;
     const length = Math.ceil(items.length / weekLength);
     return new Array(length)
@@ -35,22 +36,31 @@ export const Calendar = () => {
 
   const getLastMonthDays = () => {
     const firstDayOfWeek = target.startOf('month').day();
-    const lastMonthDays = target.subtract(1, 'month').daysInMonth();
+    const lastMonth = target.subtract(1, 'month');
+    const lastMonthDays = lastMonth.daysInMonth();
     const top = lastMonthDays - firstDayOfWeek + 1;
     return Array<number>(lastMonthDays - top + 1)
       .fill(0)
-      .map((v, i) => top + i);
+      .map((_, i) =>
+        dayjs()
+          .month(lastMonth.month())
+          .date(top + i),
+      );
   };
   const getNextMonthDays = () => {
     const lastDay = target.date(target.daysInMonth()).day();
     return Array<number>(7 - lastDay - 1)
       .fill(0)
-      .map((v, i) => i + 1);
+      .map((_, i) =>
+        dayjs()
+          .month(target.month() + 1)
+          .date(i + 1),
+      );
   };
   const getCurrentMonthDays = () => {
     return Array<number>(target.daysInMonth())
       .fill(0)
-      .map((v, i) => i + 1);
+      .map((_, i) => target.date(i + 1));
   };
   const nextMonth = () => {
     setTarget(target.add(1, 'month'));
