@@ -1,15 +1,21 @@
 import React from 'react';
+import styled from 'styled-components';
 import { Container } from '@material-ui/core';
+import { Day } from './Day';
 
 type Props = {
     items: number[];
 };
 export const Week = (props: Props) => {
     return (
-        <Container>
+        <Wrapper>
             {props.items.map((v, i) => (
-                <div>{v}</div>
+                <Day day={v}></Day>
             ))}
-        </Container>
+        </Wrapper>
     );
 };
+
+const Wrapper = styled.div`
+    display: flex;
+`;
