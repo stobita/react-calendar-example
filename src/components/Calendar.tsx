@@ -8,14 +8,28 @@ import {
   Typography,
   IconButton,
   Box,
+  Modal,
+  makeStyles,
+  createStyles,
 } from '@material-ui/core';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import styled from 'styled-components';
+import { ScheduleForm } from './ScheduleForm';
 
 type CreateContextProps = {
   target: dayjs.Dayjs;
 };
+
+const useStyles = makeStyles(() =>
+  createStyles({
+    modal: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+  }),
+);
 
 export const CalendarContext = createContext<CreateContextProps>({
   target: dayjs(),
@@ -27,13 +41,19 @@ export type DateContent = {
 
 export const Calendar = () => {
   const [target, setTarget] = useState(dayjs());
+  const [formOpen, setFormOpen] = useState(false);
+  const handleOnClose = () => {
+    setFormOpen(false);
+  };
+  const handleOnOpen = () => {
+    setFormOpen(true);
+  };
   const days = () => {
     const lastMonthDays = getLastMonthDays();
     const nextMonthDays = getNextMonthDays();
     const currentMonthDays = getCurrentMonthDays();
 
     const days = [...lastMonthDays, ...currentMonthDays, ...nextMonthDays];
-    console.log(days);
     const weeks = divisionWeek(days);
     return weeks;
   };
@@ -88,6 +108,7 @@ export const Calendar = () => {
   const beforeMonth = () => {
     setTarget(target.subtract(1, 'month'));
   };
+  const classes = useStyles();
   return (
     <>
       <CalendarContext.Provider
@@ -110,8 +131,15 @@ export const Calendar = () => {
           </Toolbar>
         </AppBar>
         {days().map((v, i) => (
-          <Week items={v}></Week>
+          <Week items={v} onClickDate={handleOnOpen}></Week>
         ))}
+        <Modal
+          className={classes.modal}
+          open={formOpen}
+          onClose={handleOnClose}
+        >
+          <ScheduleForm></ScheduleForm>
+        </Modal>
       </CalendarContext.Provider>
     </>
   );
