@@ -1,20 +1,17 @@
-import React, { useEffect, useState, createContext } from 'react';
+import React, { useState, createContext } from 'react';
 import dayjs from 'dayjs';
-import Container from '@material-ui/core/Container';
 import { Week } from './Week';
 import {
   AppBar,
   Toolbar,
   Typography,
   IconButton,
-  Box,
   Modal,
   makeStyles,
   createStyles,
 } from '@material-ui/core';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import styled from 'styled-components';
 import { ScheduleForm } from './ScheduleForm';
 
 type CreateContextProps = {
@@ -131,7 +128,7 @@ export const Calendar = () => {
           </Toolbar>
         </AppBar>
         {days().map((v, i) => (
-          <Week items={v} onClickDate={handleOnOpen}></Week>
+          <Week key={i} items={v} onClickDate={handleOnOpen}></Week>
         ))}
         <Modal
           className={classes.modal}

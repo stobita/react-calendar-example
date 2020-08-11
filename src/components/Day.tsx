@@ -1,18 +1,8 @@
-import React, { useState } from 'react';
-import styled, { css } from 'styled-components';
-import {
-  Container,
-  Typography,
-  Box,
-  Modal,
-  makeStyles,
-  Theme,
-  createStyles,
-} from '@material-ui/core';
+import React from 'react';
+import styled from 'styled-components';
+import { Typography, Box } from '@material-ui/core';
 import dayjs from 'dayjs';
-// import isToday from 'dayjs/plugin/isToday'
 import { DateContent } from './Calendar';
-import { ScheduleForm } from './ScheduleForm';
 
 type Props = {
   item: DateContent;

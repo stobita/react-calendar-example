@@ -1,8 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Container } from '@material-ui/core';
 import { Day } from './Day';
-import dayjs from 'dayjs';
 import { DateContent } from './Calendar';
 
 type Props = {
