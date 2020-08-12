@@ -9,14 +9,11 @@ import {
   Modal,
   makeStyles,
   createStyles,
+  Dialog,
 } from '@material-ui/core';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import { ScheduleForm } from './ScheduleForm';
-
-type CreateContextProps = {
-  target: dayjs.Dayjs;
-};
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -28,8 +25,20 @@ const useStyles = makeStyles(() =>
   }),
 );
 
+type CreateContextProps = {
+  target: dayjs.Dayjs;
+  selectedDate: dayjs.Dayjs;
+  setSelectedDate: (d: dayjs.Dayjs) => void;
+
+  setFormOpen: (b: boolean) => void;
+};
+
 export const CalendarContext = createContext<CreateContextProps>({
   target: dayjs(),
+  selectedDate: dayjs(),
+  setSelectedDate: () => {},
+
+  setFormOpen: () => {},
 });
 
 export type DateContent = {
@@ -39,11 +48,9 @@ export type DateContent = {
 export const Calendar = () => {
   const [target, setTarget] = useState(dayjs());
   const [formOpen, setFormOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(dayjs());
   const handleOnClose = () => {
     setFormOpen(false);
-  };
-  const handleOnOpen = () => {
-    setFormOpen(true);
   };
   const days = () => {
     const lastMonthDays = getLastMonthDays();
@@ -110,7 +117,10 @@ export const Calendar = () => {
     <>
       <CalendarContext.Provider
         value={{
-          target: target,
+          target,
+          selectedDate,
+          setSelectedDate,
+          setFormOpen,
         }}
       >
         <AppBar position="static">
@@ -128,15 +138,15 @@ export const Calendar = () => {
           </Toolbar>
         </AppBar>
         {days().map((v, i) => (
-          <Week key={i} items={v} onClickDate={handleOnOpen}></Week>
+          <Week key={i} items={v}></Week>
         ))}
-        <Modal
+        <Dialog
           className={classes.modal}
           open={formOpen}
           onClose={handleOnClose}
         >
           <ScheduleForm></ScheduleForm>
-        </Modal>
+        </Dialog>
       </CalendarContext.Provider>
     </>
   );

@@ -1,20 +1,24 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Typography, Box } from '@material-ui/core';
 import dayjs from 'dayjs';
-import { DateContent } from './Calendar';
+import { DateContent, CalendarContext } from './Calendar';
 
 type Props = {
   item: DateContent;
-  onClick: () => void;
 };
 export const Day = (props: Props) => {
   const isToday = () => {
     return dayjs().isSame(props.item.date, 'date');
   };
+  const { setSelectedDate, setFormOpen } = useContext(CalendarContext);
+  const handleOnClick = () => {
+    setSelectedDate(props.item.date);
+    setFormOpen(true);
+  };
   return (
     <>
-      <Wrapper onClick={props.onClick}>
+      <Wrapper onClick={handleOnClick}>
         <Box
           color={isToday() ? 'white' : 'inherit'}
           bgcolor={isToday() ? 'primary.main' : 'inherit'}
